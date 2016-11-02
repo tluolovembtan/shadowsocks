@@ -461,7 +461,9 @@ class Dbv3Transfer(DbTransfer):
 		self.cfg['transfer_mul'] = float(node_info_dict['traffic_rate'])
 
 		cur = conn.cursor()
-		cur.execute("SELECT " + ','.join(keys) + " FROM user")
+		sql = "SELECT "+ ','.join(keys) + " FROM user "
+        sql = "%s WHERE node_ids in(%d)" % (sql, node_id)
+        cur.execute(sql)
 		rows = []
 		for r in cur.fetchall():
 			d = {}
@@ -469,6 +471,10 @@ class Dbv3Transfer(DbTransfer):
 				d[keys[column]] = r[column]
 			rows.append(d)
 		cur.close()
+		
+		if not rows:
+			logging.warn('no user in db')
+		
 		return rows
 
 	def load(self):
