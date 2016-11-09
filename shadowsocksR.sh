@@ -54,11 +54,11 @@ dowload_files(){
         exit 1
     fi
     unzip -q manyuser.zip
-    mv shadowsocks-manyuser /usr/local/shadowsocks
+    mv shadowsocks-manyuser /root/shadowsocks
 }
 
 install(){
-    cd /usr/local/shadowsocks
+    cd /root/shadowsocks
     bash initcfg.sh
 }
 #Install ShadowsocksR
