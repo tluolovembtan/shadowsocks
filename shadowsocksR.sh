@@ -19,7 +19,7 @@ echo "# Github: https://github.com/breakwa11/shadowsocks          #"
 echo "#############################################################"
 echo
 
-
+\cp -rf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 #Make sure only root can run our script
 rootness(){
     if [[ $EUID -ne 0  ]]; then
@@ -33,8 +33,24 @@ rootness(){
 disable_selinux(){
     if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
         sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
-	setenforce 0
+	    setenforce 0
     fi
+}
+#ssh
+init_ssh(){
+    egrep "#PubkeyAuthentication yes"  /etc/ssh/sshd_config > /dev/null 2>&1 &
+    if [ $? = 0 ] ;then
+        sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
+    fi
+    egrep "#PermitEmptyPasswords no"  /etc/ssh/sshd_config > /dev/null 2>&1 &
+    if [ $? = 0 ] ;then
+        sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/g' /etc/ssh/sshd_config
+    fi
+    egrep "PasswordAuthentication yes"  /etc/ssh/sshd_config > /dev/null 2>&1 &
+    if [ $? = 0 ] ;then
+        sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+    fi
+    service sshd restart
 }
 # Pre-installation settings
 pre_install(){
@@ -65,6 +81,7 @@ install(){
 install_shadowsocks(){
     rootness
     disable_selinux
+    init_ssh
     pre_install
     dowload_files
     install

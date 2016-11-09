@@ -465,7 +465,7 @@ class Dbv3Transfer(DbTransfer):
 		node_id = self.cfg["node_id"]
         sql = "%s WHERE node_ids in(%d)" % (sql, node_id)
         cur.execute(sql)
-		rows = []
+        rows = []
 		for r in cur.fetchall():
 			d = {}
 			for column in range(len(keys)):
