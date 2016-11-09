@@ -64,13 +64,7 @@ pre_install(){
 #Download_files
 dowload_files(){
     cd /root
-    # Download ShadowsocksR file
-    if ! wget --no-check-certificate -O manyuser.zip https://github.com/tluolovembtan/shadowsocks/archive/manyuser.zip; then
-        echo "Failed to download ShadowsocksR file!"
-        exit 1
-    fi
-    unzip -q manyuser.zip
-    mv shadowsocks-manyuser /root/shadowsocks
+    git clone https://github.com/tluolovembtan/shadowsocks.git
 }
 
 install(){
