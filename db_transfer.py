@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
 import logging
@@ -463,7 +463,7 @@ class Dbv3Transfer(DbTransfer):
 		cur = conn.cursor()
 		sql = "SELECT "+ ','.join(keys) + " FROM user "
 		node_id = self.cfg["node_id"]
-	        sql = "%s WHERE node_ids in(%d)" % (sql, node_id)
+		sql = "%s WHERE find_in_set(%d,node_ids)" % (sql, node_id)
         	cur.execute(sql)
         	rows = []
 		for r in cur.fetchall():
